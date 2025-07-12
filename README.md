@@ -88,7 +88,7 @@ The following environment variables need to be configured in your Cloudflare Wor
 ## 🛠️ Development
 
 ### Prerequisites
-- Node.js (v22.16.0 or higher)
+- Node.js (v20.x.x or higher)
 - npm or yarn
 - Wrangler CLI
 - Telegram Bot Token (from @BotFather)
