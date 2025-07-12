@@ -20,6 +20,8 @@ node_modules/
 .env.production
 .dev.vars
 .prod.vars
+secret.dev.json
+secret.prod.json
 
 # logs
 logs/
