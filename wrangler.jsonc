@@ -5,6 +5,7 @@
   "compatibility_date": "2025-07-11",
   "env": {
     "dev": {
+      "account_id": "64a8b82577f82b4e9717a55a2c6900d0",
       "name": "ebola-qr-bot-dev",
       "kv_namespaces": [
         {
