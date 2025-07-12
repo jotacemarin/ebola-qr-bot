@@ -55,8 +55,27 @@ const getQr = async (c: Context<{ Bindings: CloudflareBindings }>) => {
   try {
     const qrs = await QrService.getQr(c, body);
 
+    console.log(qrs);
+
+    if (Array.isArray(qrs)) {
+      await TelegramService.sendMessage(c, {
+        chatId: body.message.chat.id,
+        message: `Found ${qrs.length} QR codes`,
+        replyToMessageId: body.message.message_id,
+      });
+    }
+
+    if (!Array.isArray(qrs) && qrs?.qrPathId) {
+      await TelegramService.sendPhoto(c, {
+        chatId: body.message.chat.id,
+        photo: qrs?.qrPathId,
+        replyToMessageId: body.message.message_id,
+      });
+    }
+
     return c.json({ success: true, data: qrs });
   } catch (error) {
+    console.error(error);
     if (error instanceof BadRequest) {
       return c.json({ error: error?.message }, error?.statusCode);
     }

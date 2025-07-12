@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "deploy": "wrangler deploy --minify --env dev",
+    "deploy:prod": "wrangler deploy --minify --env prod",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
