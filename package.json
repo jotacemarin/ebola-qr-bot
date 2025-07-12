@@ -11,10 +11,8 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "secret": "wrangler secret bulk secret.dev.json",
-    "secret:prod": "wrangler secret bulk secret.prod.json --env prod",
-    "deploy": "npm run secret && wrangler deploy --minify",
-    "deploy:prod": "npm run secret:prod && wrangler deploy --minify --env prod",
+    "secret": "wrangler secret bulk secret.dev.json --env dev",
+    "deploy": "npm run secret && wrangler deploy --minify --env dev",
     "destroy": "wrangler delete --env dev",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },

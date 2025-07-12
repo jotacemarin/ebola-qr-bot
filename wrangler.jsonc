@@ -3,15 +3,29 @@
   "name": "ebola-qr-bot",
   "main": "src/index.ts",
   "compatibility_date": "2025-07-11",
-  "kv_namespaces": [
-    {
-      "binding": "QR_DATA",
-      "id": "41ab7fae880e4ede954f65f21f797ae2"
-    }
-  ],
-  "vars": {
-    "TELEGRAM_BOT_API": "api.telegram.org/bot",
+  "env": {
+    "dev": {
+      "name": "ebola-qr-bot-dev",
+      "kv_namespaces": [
+        {
+          "binding": "QR_DATA",
+          "id": "41ab7fae880e4ede954f65f21f797ae2"
+        }
+      ],
+      "vars": {
+        "TELEGRAM_BOT_API": "api.telegram.org/bot",
+      },
+    },
   }
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "MY_KV",
+  //     "id": "my-kv-id"
+  //   }
+  // ],
+  // "vars": {
+  //   "MY_ENV_VAR": "my-env-var",
+  // },
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],
