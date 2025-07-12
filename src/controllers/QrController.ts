@@ -4,10 +4,13 @@ import { BadRequest, TelegramUpdate } from "../types";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 
 const getCommand = (body: TelegramUpdate) => {
-  const { message } = body;
-  const { text, caption, entities, caption_entities } = message;
-  const telegramText = caption ?? text;
-  const telegramEntities = caption_entities ?? entities;
+  if (body?.message?.from?.is_bot) {
+    return "default";
+  }
+
+  const telegramText = body?.message?.caption ?? body?.message?.text ?? "";
+  const telegramEntities =
+    body?.message?.caption_entities ?? body?.message?.entities ?? [];
 
   const commandEntity = telegramEntities?.find(
     (entity) => entity?.type === "bot_command"
@@ -16,14 +19,12 @@ const getCommand = (body: TelegramUpdate) => {
     return "default";
   }
 
-  const command = String(telegramText)
+  return String(telegramText)
     .substring(
       commandEntity.offset,
       commandEntity.offset + commandEntity.length
     )
     .replace("/", "");
-
-  return command;
 };
 
 const logError = async (
@@ -58,9 +59,24 @@ const logError = async (
 const setWebhook = async (c: Context<{ Bindings: CloudflareBindings }>) => {
   const { url } = await c.req.json();
 
-  await TelegramService.setWebhook(c, url);
+  const webhookInfo = await TelegramService.setWebhook(c, url);
 
-  return c.json({ message: "Webhook set successfully" });
+  const chatMenu = await TelegramService.setChatMenu(c, [
+    {
+      command: "qr",
+      description: "/qr @mention (Get QR code)",
+    },
+    {
+      command: "qr_update",
+      description: "/qr_update attach photo (Update QR code)",
+    },
+  ]);
+
+  return c.json({
+    message: "Webhook set successfully",
+    webhook: webhookInfo,
+    menu: chatMenu,
+  });
 };
 
 const webhook = async (c: Context<{ Bindings: CloudflareBindings }>) => {

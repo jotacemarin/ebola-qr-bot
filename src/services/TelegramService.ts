@@ -17,10 +17,41 @@ const setWebhook = async (
 ): Promise<void> => {
   const telegramService = initTelegramService(c);
 
-  const response = await telegramService.post("/setWebhook", {
+  await telegramService.post("/setWebhook", {
     url,
     secret_token: c.env.TELEGRAM_BOT_CUSTOM_SECRET,
   });
+
+  const response = await telegramService.get("/getWebhookInfo");
+
+  return response.data;
+};
+
+const setChatMenu = async (
+  c: Context<{ Bindings: CloudflareBindings }>,
+  commands: Array<{
+    command: string;
+    description: string;
+    language_code?: string;
+  }>
+): Promise<void> => {
+  const telegramService = initTelegramService(c);
+
+  await telegramService.post("/setMyCommands", {
+    commands,
+  });
+
+  const response = await telegramService.get("/getMyCommands");
+
+  return response.data;
+};
+
+const getChatMenu = async (
+  c: Context<{ Bindings: CloudflareBindings }>
+): Promise<void> => {
+  const telegramService = initTelegramService(c);
+
+  const response = await telegramService.get("/getMyCommands");
 
   return response.data;
 };
@@ -84,4 +115,11 @@ const sendPhoto = async (
   return response.data;
 };
 
-export { setWebhook, getChatMember, sendMessage, sendPhoto };
+export {
+  setWebhook,
+  setChatMenu,
+  getChatMenu,
+  getChatMember,
+  sendMessage,
+  sendPhoto,
+};
