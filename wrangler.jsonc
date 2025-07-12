@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ebola-qr-bot",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-11",
+  "kv_namespaces": [
+    {
+      "binding": "QR_DATA",
+      "id": "41ab7fae880e4ede954f65f21f797ae2"
+    }
+  ],
+  "vars": {
+    "TELEGRAM_BOT_API": "api.telegram.org/bot",
+  }
+  // "compatibility_flags": [
+  //   "nodejs_compat"
+  // ],
+  // "r2_buckets": [
+  //   {
+  //     "binding": "MY_BUCKET",
+  //     "bucket_name": "my-bucket"
+  //   }
+  // ],
+  // "d1_databases": [
+  //   {
+  //     "binding": "MY_DB",
+  //     "database_name": "my-database",
+  //     "database_id": ""
+  //   }
+  // ],
+  // "ai": {
+  //   "binding": "AI"
+  // },
+  // "observability": {
+  //   "enabled": true,
+  //   "head_sampling_rate": 1
+  // }
+}

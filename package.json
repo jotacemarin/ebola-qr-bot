@@ -1,0 +1,25 @@
+{
+  "name": "ebola-qr-bot",
+  "version": "1.0.0",
+  "description": "Ebola QR Bot",
+  "main": "src/index.ts",
+  "type": "module",
+  "author": "jotacemarin@gmail.com",
+  "license": "MIT",
+  "engines": {
+    "node": "22.16.0"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "hono": "^4.8.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250711.0",
+    "wrangler": "^4.4.0"
+  }
+}
