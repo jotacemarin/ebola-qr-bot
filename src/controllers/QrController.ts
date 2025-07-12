@@ -26,6 +26,35 @@ const getCommand = (body: TelegramUpdate) => {
   return command;
 };
 
+const logError = async (
+  c: Context<{ Bindings: CloudflareBindings }>,
+  error: unknown | BadRequest
+) => {
+  const body = (await c.req.json()) as TelegramUpdate;
+  const {
+    message: {
+      message_id: messageId,
+      chat: { id: chatId },
+    },
+  } = body;
+
+  let errorMessage: string = (error as Error)?.message ?? "Unknown error";
+  let statusCode: ContentfulStatusCode = 500;
+
+  if (error instanceof BadRequest) {
+    errorMessage = error?.message ?? "Bad request";
+    statusCode = error?.statusCode ?? 400;
+  }
+
+  await TelegramService.sendMessage(c, {
+    chatId: chatId,
+    message: `Failed to update QR: ${errorMessage}`,
+    replyToMessageId: messageId,
+  });
+
+  return { errorMessage, statusCode };
+};
+
 const setWebhook = async (c: Context<{ Bindings: CloudflareBindings }>) => {
   const { url } = await c.req.json();
 
@@ -55,8 +84,6 @@ const getQr = async (c: Context<{ Bindings: CloudflareBindings }>) => {
   try {
     const qrs = await QrService.getQr(c, body);
 
-    console.log(qrs);
-
     if (Array.isArray(qrs)) {
       await TelegramService.sendMessage(c, {
         chatId: body.message.chat.id,
@@ -75,12 +102,8 @@ const getQr = async (c: Context<{ Bindings: CloudflareBindings }>) => {
 
     return c.json({ success: true, data: qrs });
   } catch (error) {
-    console.error(error);
-    if (error instanceof BadRequest) {
-      return c.json({ error: error?.message }, error?.statusCode);
-    }
-
-    return c.json({ error: "Failed to get QR" }, 500);
+    const { errorMessage, statusCode } = await logError(c, error);
+    return c.json({ error: errorMessage, status: statusCode }, 200);
   }
 };
 
@@ -102,22 +125,9 @@ const updateQr = async (c: Context<{ Bindings: CloudflareBindings }>) => {
     });
 
     return c.json({ success: true, data: qrData });
-  } catch (error: unknown | BadRequest) {
-    let errorMessage: string = (error as Error)?.message ?? "Unknown error";
-    let statusCode: ContentfulStatusCode = 500;
-
-    if (error instanceof BadRequest) {
-      errorMessage = error?.message ?? "Bad request";
-      statusCode = error?.statusCode ?? 400;
-    }
-
-    await TelegramService.sendMessage(c, {
-      chatId: chatId,
-      message: `Failed to update QR: ${errorMessage}`,
-      replyToMessageId: messageId,
-    });
-
-    return c.json({ error: errorMessage }, statusCode);
+  } catch (error) {
+    const { errorMessage, statusCode } = await logError(c, error);
+    return c.json({ error: errorMessage, status: statusCode }, 200);
   }
 };
 

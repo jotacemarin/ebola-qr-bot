@@ -107,6 +107,12 @@ The following environment variables need to be configured in your Cloudflare Wor
    TELEGRAM_BOT_CUSTOM_SECRET=your_custom_secret_here
    ```
 
+3. **Configure secrets**
+   ```bash
+   npx wrangler secret put TELEGRAM_BOT_CUSTOM_SECRET --env dev
+   npx wrangler secret put TELEGRAM_BOT_TOKEN --env dev
+   ```
+
 3. **Start development server:**
    ```bash
    npm run dev
