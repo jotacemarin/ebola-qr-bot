@@ -17,6 +17,19 @@
         "TELEGRAM_BOT_API": "api.telegram.org/bot",
       },
     },
+    "prod": {
+      "account_id": "64a8b82577f82b4e9717a55a2c6900d0",
+      "name": "ebola-qr-bot-prod",
+      "kv_namespaces": [
+        {
+          "binding": "QR_DATA",
+          "id": "7a7a3f1298b34d88b2c5772321905a7a"
+        }
+      ],
+      "vars": {
+        "TELEGRAM_BOT_API": "api.telegram.org/bot",
+      },
+    }
   }
   // "kv_namespaces": [
   //   {
