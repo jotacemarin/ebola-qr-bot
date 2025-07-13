@@ -32,7 +32,7 @@ jobs:
           dir: "/"
 
       - name: Deploy to Cloudflare
-        run: npm run deploy
+        run: npm run deploy:prod
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_PROD }}
           CLOUDFLARE_ENV: "prod"
